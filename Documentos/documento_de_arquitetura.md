@@ -136,13 +136,19 @@ Caso uma das verificações apresente uma inconsistência:
 
 Caso não sejam encontradas inconsistências, o correio eletrônico não é marcado como suspeito.
 
-### 2.4 Operações principais
+### 2.4 Operações principais e volume estimado
 
-Lista de entidades x operaçao dominante no algoritmo
+Lista de entidades x operação dominante no algoritmo, com o volume estimado de cada uma.
 
-1. Registro de domínios de encurtamento de links: Consulta
-2. Index de empresas: Consulta
-3. Templates específicos de uma empresa: Consulta
+| Entidade | Operação dominante | Volume estimado |
+|---|---|---|
+| Registro de domínios de encurtamento de links | Consulta | 200 domínios |
+| Index de empresas | Consulta | 5.000 empresas |
+| Templates específicos de uma empresa | Consulta | 5.000 templates |
+
+O volume do Registro de domínios de encurtamento é uma ordem de grandeza: domínios de encurtamento surgem e desaparecem diariamente, e a lista é mantida manualmente pelo operador (seção 3.6). O número de templates acompanha o de empresas do Index.
+
+Carga de entrada: o usuário-alvo recebe até 200 correios eletrônicos por dia. Cada correio eletrônico com hyperlink dispara uma passada pelas três entidades acima.
 
 ---
 
