@@ -1,5 +1,3 @@
-using DetectorPhishing.Infrastructure;
-
 namespace DetectorPhishing.Domain;
 
 /// <summary>

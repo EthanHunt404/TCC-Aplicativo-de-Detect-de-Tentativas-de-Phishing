@@ -1,4 +1,4 @@
-namespace DetectorPhishing.Infrastructure;
+namespace DetectorPhishing.Domain;
 
 /// <summary>
 /// Interface entre a regra de negocio (EmailAnalist) e a implementacao
