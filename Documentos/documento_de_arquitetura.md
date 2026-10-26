@@ -6,7 +6,7 @@
 
 ## 1. Classes de Domínio — Regras de Negócio
 
-> Etapa 14 do Roteiro de Execução (Fase 2). Lista apenas as classes que representam algo do problema em si — sem interfaces de repositório e sem classes de coordenação/serviço (essas ficam para quando a arquitetura em camadas for desenhada, Etapa 15).
+> Etapa 14 do Roteiro de Execução (Fase 2). Lista as classes que representam algo do problema em si — sem classes de coordenação/serviço (essas ficam para quando a arquitetura em camadas for desenhada, Etapa 15). O contrato de acesso a dados, declarado no Domain, está descrito na seção 1.6.
 
 ### 1.1 ConteudoRelevante
 
@@ -43,6 +43,10 @@ Executa o algoritmo de análise (seção 2) sobre um `ConteudoRelevante` e devol
 
 `Capturador`: (captura o correio eletrônico para uma fila e filtra o conteúdo, entregando um `ConteudoRelevante` apenas quando um hyperlink é encontrado) 
 `MongoDBInterface`: (uma interface generica na database MongoDB para facilitar as consultas do `Algoritmo de Analise`)
+
+### 1.6 Contrato de acesso a dados — IConsulta
+
+Interface declarada no Domain, por inversão de dependência (ADR 0005). O `EmailAnalist` depende apenas dela, nunca da `MongoDBInterface`, que a implementa na camada Infrastructure. Oferece ao `EmailAnalist` as três consultas do algoritmo (seção 2.4): ao Registro de domínios de encurtamento, ao Index de empresas e ao Template específico da empresa.
 
 ---
 
@@ -150,6 +154,39 @@ O volume do Registro de domínios de encurtamento é uma ordem de grandeza: dom�
 
 Carga de entrada: o usuário-alvo recebe até 200 correios eletrônicos por dia. Cada correio eletrônico com hyperlink dispara uma passada pelas três entidades acima.
 
+### 2.5 Decisão algorítmica (estimada)
+
+As duas consultas que mais se repetem no algoritmo são: (a) para cada hyperlink, verificar se o domínio está no Registro de domínios de encurtamento; (b) para cada correio eletrônico, procurar no conteúdo o nome de uma empresa do Index. Para cada uma foram comparadas duas estruturas: **lista com varredura sequencial** e **tabela de dispersão** (`HashSet`).
+
+#### 2.5.1 Operações por mensagem (estimativa com os volumes da seção 2.4)
+
+| Consulta | Lista sequencial | Tabela de dispersão |
+|---|---|---|
+| Registro de encurtamento, 1 link | até 200 comparações | 1 consulta |
+| Registro de encurtamento, 5 links | até 1.000 comparações | 5 consultas |
+| Registro de encurtamento, 20 links | até 4.000 comparações | 20 consultas |
+| Index de empresas (mensagem de 500 palavras) | até 5.000 buscas de nome no texto | cerca de 1.500 consultas (sequências de 1 a 3 palavras) |
+
+#### 2.5.2 Tempo estimado por mensagem (RNF-01)
+
+Estimativa, não medição.
+
+| Etapa | Tempo estimado |
+|---|---|
+| Obtenção da mensagem (IMAP/OAuth2, rede) | 0,5 a 2 s |
+| Consultas ao MongoDB local | até 0,1 s |
+| Algoritmo de análise | menos de 10 ms |
+| Notificação e gravação do relatório | até 0,1 s |
+| **Total** | **cerca de 1 a 2,5 s** |
+
+O total estimado corresponde a 10% a 25% do limite de 10 segundos. Com até 200 correios eletrônicos por dia, o processamento acumulado é de cerca de 3 a 8 minutos por dia, diluídos ao longo do dia.
+
+#### 2.5.3 Decisão
+
+O Registro de domínios de encurtamento e o Index de empresas são consultados por tabela de dispersão em memória, carregada da base, e não por varredura sequencial (ADR 0006). A consulta ao Template da empresa é uma busca por chave exata (nome da empresa, seção 3.1.2).
+
+Pelas estimativas acima, as duas estruturas respeitam o limite de 10 segundos com folga nos volumes da PoC, então a escolha não decorre do limite de tempo. A tabela foi escolhida porque o número de operações da varredura cresce com o número de domínios e de empresas, e o da tabela não, sem custo adicional de implementação. Todos os valores desta seção são estimativas; o tempo ponta a ponta será verificado na Fase 5 (testes).
+
 ---
 
 ## 3. Estrutura de Dados
@@ -166,7 +203,13 @@ A base será hospedada localmente.
 
 #### 3.1.1 Justificação
 
-A equipe, consistindo de uma unica pessoa com os papeis de projetista, pesquisador e executor, esta acostumado com essa tecnologia, e nenhuma necessidade dentro desse PoC descorda com o uso dessa tecnologia.
+A operação predominante é a consulta: as três coleções são somente lidas pela aplicação (seção 3.6) e cada correio eletrônico com hyperlink dispara uma passada por elas (seção 2.4). O volume estimado é pequeno: 200 domínios de encurtamento, 5.000 empresas e 5.000 templates, com carga de até 200 correios eletrônicos por dia (seção 2.4).
+
+Cada template é um documento independente (empresa e lista de domínios oficiais), sem relação com os demais e sem necessidade de junções, o que corresponde ao modelo documental do MongoDB. Nesse volume e com essa operação, o MongoDB atende com folga o limite de 10 segundos por mensagem (estimativa da seção 2.5). A familiaridade da equipe com a tecnologia foi usada apenas como critério de desempate.
+
+#### 3.1.2 Índices e política de atualização
+
+A coleção de templates tem índice único no campo `company`, que é a chave da consulta feita após a identificação da empresa. O Registro de domínios de encurtamento e o Index de empresas são lidos por inteiro e mantidos em tabela de dispersão em memória (seção 2.5). A política de atualização é manual: qualquer adição, remoção ou alteração é feita por um operador diretamente na base (seção 3.6).
 
 ### 3.2 Registro de domínios de encurtamento de links
 
@@ -193,11 +236,11 @@ Esse documento registra uma empresa e é utilizado para procurar o nome da empre
 
 ```json
 {
-	companies = [
-		EmpresaExemplo1
-		EmpresaExemplo2
-		...
-	]
+  "companies": [
+    "EmpresaExemplo1",
+    "EmpresaExemplo2",
+    ...
+  ]
 }
 ```
 
@@ -246,7 +289,7 @@ Qualquer adição, remoção ou atualização nelas é feita manualmente por um 
 
 ## 4. Rastreabilidade dos Requisitos de Prioridade Alta
 
-> O Documento de Requisitos v1.0 não classifica formalmente os requisitos por prioridade. Para esta rastreabilidade, adota-se o critério: todo RF do núcleo funcional (RF-01 a RF-11) é Alta, 
+> O Documento de Requisitos v1.2 não classifica formalmente os requisitos por prioridade. Para esta rastreabilidade, adota-se o critério: todo RF do núcleo funcional (RF-01 a RF-11) é Alta, 
 por não existir escopo "desejável" nesta PoC — tudo o que está especificado é obrigatório. RNF-01 a RNF-04 são Alta por serem eliminatórios (TR 3.3/6.1) ou por corresponderem ao critério de tempo/volume exigido pelo AV1 (T4). 
 RNF-05 a RNF-07 permanecem Média e ficam fora desta tabela, por não determinarem estrutura de camadas ou de dados.
 
@@ -255,7 +298,7 @@ RNF-05 a RNF-07 permanecem Média e ficam fora desta tabela, por não determinar
 | RF-01 | Operar continuamente em segundo plano | Camada Presentation (ADR 0005) — bandeja do sistema |
 | RF-02 | Autenticação OAuth2, sem senha | ADR 0004; camada Infrastructure |
 | RF-03 | Bloquear análise sem autorização válida | Camada Infrastructure (guarda de OAuth2) — **ainda sem classe própria** |
-| RF-04 | Monitorar IMAP/SSL (porta 993) | `Capturador` (§1.4); ADR 0003 (MailKit); camada Infrastructure |
+| RF-04 | Monitorar IMAP/SSL (porta 993) | `Capturador` (§1.5); ADR 0003 (MailKit); camada Infrastructure |
 | RF-05 | Identificar mensagens com hyperlink | `ConteudoRelevante` (§1.1); Algoritmo §2.3.2 |
 | RF-06 | Ignorar mensagens sem hyperlink | Algoritmo §2.2 / §2.3.2 |
 | RF-07 | Validar hyperlink (encurtamento, domínio oficial, remetente) | Algoritmo §2.3.3 e §2.3.6; Estrutura de Dados §3.2 e §3.4 |
@@ -263,6 +306,7 @@ RNF-05 a RNF-07 permanecem Média e ficam fora desta tabela, por não determinar
 | RF-09 | Notificar o usuário | Algoritmo §2.3.7; camada Presentation (ADR 0005) |
 | RF-10 | Gerar relatório de inconsistências | `RelatorioInconsistencias` (§1.3); Estrutura de Dados §3.6 |
 | RF-11 | Identificar empresa impersonada | Algoritmo §2.3.4; Estrutura de Dados §3.3 (Index de empresas) |
-| RNF-01 | Analisar em até 10s | **sem verificação formal — prorrogada para Fase 5 (testes)** |
+| RNF-01 | Analisar em até 10s | Tempo estimado em 1 a 2,5 s por mensagem (§2.5.2); **verificação na Fase 5 (testes)** |
 | RNF-02 | Não armazenar senha do usuário | ADR 0004; nenhuma estrutura de dados deste documento guarda credencial |
-| RNF-03 | Processamento local (client-side) | Algoritmo completo roda no cliente (§2.2–§2.3); |
+| RNF-03 | Processamento local (client-side) | Algoritmo completo roda no cliente (§2.2–§2.3). |
+| RNF-04 | Base de templates local (localhost) | §3.1 (hospedagem local); §3.1.1; ADR 0002 |
