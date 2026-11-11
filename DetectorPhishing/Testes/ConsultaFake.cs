@@ -1,4 +1,4 @@
-using DetectorPhishing.Infrastructure;
+using DetectorPhishing.Domain;
 
 namespace DetectorPhishing.Testes;
 

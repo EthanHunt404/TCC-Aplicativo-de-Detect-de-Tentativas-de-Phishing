@@ -1,7 +1,7 @@
+using System.Reflection;
 using DetectorPhishing;
 using DetectorPhishing.Domain;
 using DetectorPhishing.Application;
-using DetectorPhishing.Infrastructure;
 using Xunit;
 
 namespace DetectorPhishing.Testes;
@@ -196,5 +196,120 @@ public static class EmailAnalistTests
             "colega@empresa-interna.com", string.Empty, Array.Empty<string>());
 
         Assert.Null(analista.Analisar(conteudo));
+    }
+
+    [Fact]
+    public static void Dominio_NaoReferencia_OutrasCamadas()
+    {
+        var tiposReferenciados = ObterTiposReferenciadosDaCamada("DetectorPhishing.Domain");
+
+        Assert.DoesNotContain(tiposReferenciados, tipo =>
+            PertenceACamada(tipo, "Application")
+            || PertenceACamada(tipo, "Infrastructure")
+            || PertenceACamada(tipo, "Presentation"));
+    }
+
+    [Fact]
+    public static void Application_NaoReferencia_InfrastructureNemPresentation()
+    {
+        var tiposReferenciados = ObterTiposReferenciadosDaCamada("DetectorPhishing.Application");
+
+        Assert.DoesNotContain(tiposReferenciados, tipo =>
+            PertenceACamada(tipo, "Infrastructure")
+            || PertenceACamada(tipo, "Presentation"));
+    }
+
+    private static IEnumerable<Type> ObterTiposReferenciadosDaCamada(string nomeNamespace)
+    {
+        var tiposDaCamada = typeof(EmailAnalist).Assembly.GetTypes()
+            .Where(tipo => tipo.Namespace == nomeNamespace);
+
+        return tiposDaCamada.SelectMany(ObterTiposReferenciados);
+    }
+
+    private static IEnumerable<Type> ObterTiposReferenciados(Type tipo)
+    {
+        if (tipo.BaseType != null)
+        {
+            foreach (var tipoBase in ExpandirTipo(tipo.BaseType))
+                yield return tipoBase;
+        }
+
+        foreach (var interfaceTipo in tipo.GetInterfaces())
+        {
+            foreach (var tipoInterface in ExpandirTipo(interfaceTipo))
+                yield return tipoInterface;
+        }
+
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.Static
+            | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
+
+        foreach (var campo in tipo.GetFields(flags))
+        {
+            foreach (var tipoCampo in ExpandirTipo(campo.FieldType))
+                yield return tipoCampo;
+        }
+
+        foreach (var propriedade in tipo.GetProperties(flags))
+        {
+            foreach (var tipoPropriedade in ExpandirTipo(propriedade.PropertyType))
+                yield return tipoPropriedade;
+
+            foreach (var parametro in propriedade.GetIndexParameters())
+            {
+                foreach (var tipoParametro in ExpandirTipo(parametro.ParameterType))
+                    yield return tipoParametro;
+            }
+        }
+
+        foreach (var metodo in tipo.GetMethods(flags))
+        {
+            foreach (var tipoRetorno in ExpandirTipo(metodo.ReturnType))
+                yield return tipoRetorno;
+
+            foreach (var parametro in metodo.GetParameters())
+            {
+                foreach (var tipoParametro in ExpandirTipo(parametro.ParameterType))
+                    yield return tipoParametro;
+            }
+        }
+
+        foreach (var construtor in tipo.GetConstructors(flags))
+        {
+            foreach (var parametro in construtor.GetParameters())
+            {
+                foreach (var tipoParametro in ExpandirTipo(parametro.ParameterType))
+                    yield return tipoParametro;
+            }
+        }
+    }
+
+    private static IEnumerable<Type> ExpandirTipo(Type tipo)
+    {
+        yield return tipo;
+
+        if (tipo.HasElementType && tipo.GetElementType() is { } tipoElemento)
+        {
+            foreach (var tipoExpandido in ExpandirTipo(tipoElemento))
+                yield return tipoExpandido;
+        }
+
+        if (tipo.IsGenericType)
+        {
+            foreach (var argumento in tipo.GetGenericArguments())
+            {
+                foreach (var tipoExpandido in ExpandirTipo(argumento))
+                    yield return tipoExpandido;
+            }
+        }
+    }
+
+    private static bool PertenceACamada(Type tipo, string camada)
+    {
+        var nomeNamespace = tipo.Namespace;
+        var prefixo = $"DetectorPhishing.{camada}";
+
+        return nomeNamespace == prefixo
+            || nomeNamespace?.StartsWith(prefixo + ".", StringComparison.Ordinal) == true;
     }
 }
