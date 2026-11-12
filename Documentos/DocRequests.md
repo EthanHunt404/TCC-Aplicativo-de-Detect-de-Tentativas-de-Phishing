@@ -15,4 +15,5 @@
 - **Alternativa A:** autorizar uma exceção explícita à regra 25.13 apenas para os 20 domínios de encurtamento nomeados em 25.2; manter fictícios todos os domínios empresariais e sintéticos.
 - **Alternativa B:** manter a proibição absoluta de domínios reais e revisar a lista da tarefa 25.2 para usar 20 domínios sintéticos.
 - **Recomendação:** A, pois preserva os vetores exatos exigidos pela tarefa 25.2 e restringe domínios reais à coleção de encurtadores, sem introduzir empresas reais.
-- **Estado:** aguardando decisão humana; nenhuma base ou seed foi criada/executada.
+- **Decisão humana:** alternativa A aprovada em 12/11/2026.
+- **Estado:** resolvido. A exceção aplica-se somente aos 20 domínios reais explicitamente listados em 25.2; nomes e domínios empresariais permanecem fictícios. O seed será criado, mas sua execução continua reservada à tarefa humana 25.5.
