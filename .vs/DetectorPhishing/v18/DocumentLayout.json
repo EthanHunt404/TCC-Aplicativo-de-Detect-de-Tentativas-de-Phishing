@@ -1,32 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\Documentos\\DocRequests.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Documentos\\DocRequests.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{11111111-1111-1111-1111-111111111111}|DetectorPhishing\\DetectorPhishing.csproj|c:\\users\\etbut\\onedrive\\documentos\\tcc - aplicativo de detec\u00E7\u00E3o de tentativas de phishing\\detectorphishing\\testes\\emailanalisttests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{11111111-1111-1111-1111-111111111111}|DetectorPhishing\\DetectorPhishing.csproj|solutionrelative:detectorphishing\\testes\\emailanalisttests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{11111111-1111-1111-1111-111111111111}|DetectorPhishing\\DetectorPhishing.csproj|c:\\users\\etbut\\onedrive\\documentos\\tcc - aplicativo de detec\u00E7\u00E3o de tentativas de phishing\\detectorphishing\\testes\\consultadummy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{11111111-1111-1111-1111-111111111111}|DetectorPhishing\\DetectorPhishing.csproj|solutionrelative:detectorphishing\\testes\\consultadummy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{11111111-1111-1111-1111-111111111111}|DetectorPhishing\\DetectorPhishing.csproj|c:\\users\\etbut\\onedrive\\documentos\\tcc - aplicativo de detec\u00E7\u00E3o de tentativas de phishing\\detectorphishing\\testes\\consultafake.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{11111111-1111-1111-1111-111111111111}|DetectorPhishing\\DetectorPhishing.csproj|solutionrelative:detectorphishing\\testes\\consultafake.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D12EC702-1392-403A-AFC5-962C198A1850}|C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing{A30F4C33-3B4D-4636-9186-13773ED27A85}|C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{D12EC702-1392-403A-AFC5-962C198A1850}|C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing{A30F4C33-3B4D-4636-9186-13773ED27A85}|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{11111111-1111-1111-1111-111111111111}|DetectorPhishing\\DetectorPhishing.csproj|c:\\users\\etbut\\onedrive\\documentos\\tcc - aplicativo de detec\u00E7\u00E3o de tentativas de phishing\\detectorphishing\\presentation\\.gitkeep||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{11111111-1111-1111-1111-111111111111}|DetectorPhishing\\DetectorPhishing.csproj|solutionrelative:detectorphishing\\presentation\\.gitkeep||{8B382828-6202-11D1-8870-0000F87579D2}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -34,95 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": ".gitkeep",
-              "DocumentMoniker": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\DetectorPhishing\\Presentation\\.gitkeep",
-              "RelativeDocumentMoniker": "DetectorPhishing\\Presentation\\.gitkeep",
-              "ToolTip": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\DetectorPhishing\\Presentation\\.gitkeep",
-              "RelativeToolTip": "DetectorPhishing\\Presentation\\.gitkeep",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-11-11T23:12:41.238Z",
-              "EditorCaption": "",
-              "OwnerCaption": "%2"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": ".gitignore",
-              "DocumentMoniker": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\.gitignore",
-              "RelativeDocumentMoniker": ".gitignore",
-              "ToolTip": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\.gitignore",
-              "RelativeToolTip": ".gitignore",
-              "ViewState": "AgIAACsAAAAAAAAAAABBwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-11-11T23:11:55.347Z",
-              "EditorCaption": "",
-              "OwnerCaption": "%3"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ConsultaFake.cs",
-              "DocumentMoniker": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\DetectorPhishing\\Testes\\ConsultaFake.cs",
-              "RelativeDocumentMoniker": "DetectorPhishing\\Testes\\ConsultaFake.cs",
-              "ToolTip": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\DetectorPhishing\\Testes\\ConsultaFake.cs",
-              "RelativeToolTip": "DetectorPhishing\\Testes\\ConsultaFake.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAABBwAEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-11T23:11:55.194Z",
-              "EditorCaption": "",
-              "OwnerCaption": "%2"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ConsultaDummy.cs",
-              "DocumentMoniker": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\DetectorPhishing\\Testes\\ConsultaDummy.cs",
-              "RelativeDocumentMoniker": "DetectorPhishing\\Testes\\ConsultaDummy.cs",
-              "ToolTip": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\DetectorPhishing\\Testes\\ConsultaDummy.cs",
-              "RelativeToolTip": "DetectorPhishing\\Testes\\ConsultaDummy.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAABBwAEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-11T23:11:54.987Z",
-              "EditorCaption": "",
-              "OwnerCaption": "%2"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "EmailAnalistTests.cs",
-              "DocumentMoniker": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\DetectorPhishing\\Testes\\EmailAnalistTests.cs",
-              "RelativeDocumentMoniker": "DetectorPhishing\\Testes\\EmailAnalistTests.cs",
-              "ToolTip": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\DetectorPhishing\\Testes\\EmailAnalistTests.cs",
-              "RelativeToolTip": "DetectorPhishing\\Testes\\EmailAnalistTests.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-11-11T23:11:54.752Z",
-              "EditorCaption": "",
-              "OwnerCaption": "%2"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "DocRequests.md",
-              "DocumentMoniker": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\Documentos\\DocRequests.md",
-              "RelativeDocumentMoniker": "Documentos\\DocRequests.md",
-              "ToolTip": "C:\\Users\\etbut\\OneDrive\\Documentos\\TCC - Aplicativo de Detec\u00E7\u00E3o de Tentativas de Phishing\\Documentos\\DocRequests.md",
-              "RelativeToolTip": "Documentos\\DocRequests.md",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAlAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
-              "WhenOpened": "2026-11-11T23:05:56.964Z",
-              "EditorCaption": "",
-              "OwnerCaption": "%3"
             }
           ]
         }
