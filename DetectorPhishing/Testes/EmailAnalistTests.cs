@@ -2,6 +2,7 @@ using System.Reflection;
 using DetectorPhishing;
 using DetectorPhishing.Domain;
 using DetectorPhishing.Application;
+using MimeKit;
 using Xunit;
 
 namespace DetectorPhishing.Testes;
@@ -196,6 +197,25 @@ public static class EmailAnalistTests
             "colega@empresa-interna.com", string.Empty, Array.Empty<string>());
 
         Assert.Null(analista.Analisar(conteudo));
+    }
+
+    [Fact]
+    public static void AmostrasEml_AbremNoMimeKit()
+    {
+        var diretorioAmostras = Path.Combine(Directory.GetCurrentDirectory(), "base", "amostras");
+        var arquivos = Directory.GetFiles(diretorioAmostras, "S-*.eml")
+            .OrderBy(caminho => caminho, StringComparer.Ordinal)
+            .ToArray();
+
+        Assert.Equal(15, arquivos.Length);
+
+        foreach (var arquivo in arquivos)
+        {
+            var mensagem = MimeMessage.Load(arquivo);
+
+            Assert.NotNull(mensagem);
+            Assert.NotEmpty(mensagem.From);
+        }
     }
 
     [Fact]
