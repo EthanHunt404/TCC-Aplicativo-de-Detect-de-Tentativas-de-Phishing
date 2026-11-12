@@ -24,10 +24,17 @@ public class EmailAnalist
         if (conteudo == null || !conteudo.ContemHyperlink())
             return null;
 
+        var empresa = _consulta.IdentificarEmpresa(conteudo.ConteudoBruto).FirstOrDefault();
+        if (string.IsNullOrWhiteSpace(empresa)
+            || empresa.Equals("nenhum", StringComparison.OrdinalIgnoreCase))
+        {
+            return null;
+        }
+
         var inconsistencias = new List<Inconsistencia>();
 
         VerificarEncurtamento(conteudo, inconsistencias);
-        VerificarDominiosOficiais(conteudo, inconsistencias);
+        VerificarDominiosOficiais(conteudo, empresa, inconsistencias);
 
         return inconsistencias.Count > 0
             ? new RelatorioInconsistencias(conteudo.ConteudoBruto, inconsistencias, DateTime.Now)
@@ -48,12 +55,11 @@ public class EmailAnalist
         }
     }
 
-    private void VerificarDominiosOficiais(ConteudoRelevante conteudo, List<Inconsistencia> inconsistencias)
+    private void VerificarDominiosOficiais(
+        ConteudoRelevante conteudo,
+        string empresa,
+        List<Inconsistencia> inconsistencias)
     {
-        var empresa = _consulta.IdentificarEmpresa(conteudo.ConteudoBruto).FirstOrDefault();
-        if (empresa == null)
-            return; // empresa nao identificada: nao ha template para comparar
-
         var dominioOficial = _consulta.ConsultarTemplateEmpresa(empresa);
         if (string.IsNullOrWhiteSpace(dominioOficial))
             return; // empresa identificada, mas sem template registrado

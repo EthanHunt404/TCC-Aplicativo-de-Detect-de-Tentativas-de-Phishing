@@ -39,7 +39,7 @@ Um namespace por camada. Nenhuma classe de `Domain` referencia `Infrastructure` 
 ## 4. Controle de versão
 
 - Repositório Git único.
-- Um branch por funcionalidade: `feature/f-XX-nome-curto`, referenciando F-01 a F-08 (Documento de Requisitos, seção 7).
+- Um branch por funcionalidade: `feature/f-XX-nome-curto`, referenciando F-01 a F-07 (Documento de Requisitos, seção 7).
 - Commits pequenos e descritivos — um por incremento funcional verificável.
 - Mesclagem à `main` somente quando o card atinge a Definition of Done (Documento de Requisitos, seção 11).
 
@@ -62,3 +62,4 @@ Um namespace por camada. Nenhuma classe de `Domain` referencia `Infrastructure` 
 |---|---|---|---|
 | 1.0 | 25/09/2026 | Emissão inicial | Elaborado para a Etapa 9 do Roteiro de Execução (Fase 2 — Decisões técnicas de base), seguindo convenções .NET e princípios SOLID. |
 | 1.1 | 21/10/2026 | Exemplos de nomes (seção 1 e seção 3-S) e referência à Definition of Done (seção 4) | Exemplos alinhados às classes reais do domínio (`ConteudoRelevante`, `RelatorioInconsistencias`, `EmailAnalist`); referência ao Documento de Requisitos corrigida de seção 12 para seção 11 após a renumeração. Sem impacto em prazo; esforço limitado à revisão documental. |
+| 1.2 | 28/10/2026 | Referência às funcionalidades (seção 4) | Intervalo de funcionalidades corrigido de F-01 a F-08 para F-01 a F-07, após a remoção da F-08 no Documento de Requisitos v1.2. Sem impacto em prazo; esforço limitado à revisão documental. |

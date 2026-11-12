@@ -1,0 +1,9 @@
+Date: Thu, 12 Nov 2026 18:00:11 -0300
+From: contato@exemplo.invalid
+To: destinatario@exemplo.invalid
+Subject: Aviso de acesso
+Message-ID: <S-11@exemplo.invalid>
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+
+<html><body><p>Consulte as informacoes sobre o acesso.</p><a href="https://site-desconhecido.example/x">Consultar informacoes</a></body></html>

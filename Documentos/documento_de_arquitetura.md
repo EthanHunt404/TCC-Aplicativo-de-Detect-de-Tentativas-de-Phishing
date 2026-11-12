@@ -67,14 +67,17 @@ hyperlinks ← verificar existência de hyperlinks
 SE hyperlinks estiver vazio:
     ignorar o correio eletrônico
 
+empresa ← identificar empresa sendo impersonada
+           no conteúdo do correio eletrônico
+           utilizando o Registro de empresas
+
+SE nenhuma empresa for identificada:
+    ignorar o correio eletrônico por completo
+
 PARA CADA hyperlink:
 
     verificar domínio e padrão do hyperlink
     no Registro de domínios de encurtamento
-
-empresa ← identificar empresa sendo impersonada
-           no conteúdo do correio eletrônico
-           utilizando o Registro de empresas
 
 template ← consultar o Template específico
            da empresa identificada
@@ -111,15 +114,17 @@ O conteudo do correio eletronico e verificado para existencia de hyperlinks
 
 Correios eletrônicos sem hyperlinks são ignorados.
 
-#### 2.3.3 Verificação de encurtamento
+#### 2.3.3 Identificação da empresa
+
+O nome da empresa sendo impersonada dentro do conteudo do correio eletronico é capturado referenciando o Index de empresas.
+
+Se nenhuma empresa for identificada, o correio eletrônico é ignorado por completo, inclusive quando contém hyperlinks ou links de encurtadores conhecidos (DR-003).
+
+#### 2.3.4 Verificação de encurtamento
 
 Cada hyperlink capturado é verificado contra o Registro de domínios de encurtamento de links.
 
 A verificação considera os domínios registrados e os padrões de links encurtados associados a eles.
-
-#### 2.3.4 Identificação da empresa
-
-O nome da empresa sendo impersonada dentro do conteudo do correio eletronico é capturado referenciando o Index de empresas.
 
 #### 2.3.5 Consulta do template
 
@@ -289,7 +294,7 @@ Qualquer adição, remoção ou atualização nelas é feita manualmente por um 
 
 ## 4. Rastreabilidade dos Requisitos de Prioridade Alta
 
-> O Documento de Requisitos v1.2 não classifica formalmente os requisitos por prioridade. Para esta rastreabilidade, adota-se o critério: todo RF do núcleo funcional (RF-01 a RF-11) é Alta, 
+> O Documento de Requisitos v1.2 não classifica formalmente os requisitos por prioridade. Para esta rastreabilidade, adota-se o critério: todo RF do núcleo funcional (RF-01 a RF-10) é Alta, 
 por não existir escopo "desejável" nesta PoC — tudo o que está especificado é obrigatório. RNF-01 a RNF-04 são Alta por serem eliminatórios (TR 3.3/6.1) ou por corresponderem ao critério de tempo/volume exigido pelo AV1 (T4). 
 RNF-05 a RNF-07 permanecem Média e ficam fora desta tabela, por não determinarem estrutura de camadas ou de dados.
 
@@ -301,11 +306,10 @@ RNF-05 a RNF-07 permanecem Média e ficam fora desta tabela, por não determinar
 | RF-04 | Monitorar IMAP/SSL (porta 993) | `Capturador` (§1.5); ADR 0003 (MailKit); camada Infrastructure |
 | RF-05 | Identificar mensagens com hyperlink | `ConteudoRelevante` (§1.1); Algoritmo §2.3.2 |
 | RF-06 | Ignorar mensagens sem hyperlink | Algoritmo §2.2 / §2.3.2 |
-| RF-07 | Validar hyperlink (encurtamento, domínio oficial, remetente) | Algoritmo §2.3.3 e §2.3.6; Estrutura de Dados §3.2 e §3.4 |
+| RF-07 | Validar hyperlink (encurtamento, domínio oficial, remetente) | Algoritmo §2.3.3 a §2.3.6; Estrutura de Dados §3.2 a §3.4 |
 | RF-08 | Marcar mensagem como suspeita | Algoritmo §2.3.7; `Inconsistencia` (§1.2) |
 | RF-09 | Notificar o usuário | Algoritmo §2.3.7; camada Presentation (ADR 0005) |
 | RF-10 | Gerar relatório de inconsistências | `RelatorioInconsistencias` (§1.3); Estrutura de Dados §3.6 |
-| RF-11 | Identificar empresa impersonada | Algoritmo §2.3.4; Estrutura de Dados §3.3 (Index de empresas) |
 | RNF-01 | Analisar em até 10s | Tempo estimado em 1 a 2,5 s por mensagem (§2.5.2); **verificação na Fase 5 (testes)** |
 | RNF-02 | Não armazenar senha do usuário | ADR 0004; nenhuma estrutura de dados deste documento guarda credencial |
 | RNF-03 | Processamento local (client-side) | Algoritmo completo roda no cliente (§2.2–§2.3). |

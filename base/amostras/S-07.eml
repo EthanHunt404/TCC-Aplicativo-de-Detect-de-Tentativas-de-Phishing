@@ -1,0 +1,9 @@
+Date: Thu, 12 Nov 2026 18:00:07 -0300
+From: avisos@bancoexemplo.com.br
+To: destinatario@exemplo.invalid
+Subject: Acesso a conta - BancoExemplo
+Message-ID: <S-07@exemplo.invalid>
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+
+<html><body><p>BancoExemplo: revise o acesso a sua conta.</p><a href="https://www.bancoexemplo.com.br@evil.example/login">Revisar acesso</a></body></html>
