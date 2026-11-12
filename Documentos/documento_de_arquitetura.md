@@ -67,14 +67,17 @@ hyperlinks ← verificar existência de hyperlinks
 SE hyperlinks estiver vazio:
     ignorar o correio eletrônico
 
+empresa ← identificar empresa sendo impersonada
+           no conteúdo do correio eletrônico
+           utilizando o Registro de empresas
+
+SE nenhuma empresa for identificada:
+    ignorar o correio eletrônico por completo
+
 PARA CADA hyperlink:
 
     verificar domínio e padrão do hyperlink
     no Registro de domínios de encurtamento
-
-empresa ← identificar empresa sendo impersonada
-           no conteúdo do correio eletrônico
-           utilizando o Registro de empresas
 
 template ← consultar o Template específico
            da empresa identificada
@@ -111,15 +114,17 @@ O conteudo do correio eletronico e verificado para existencia de hyperlinks
 
 Correios eletrônicos sem hyperlinks são ignorados.
 
-#### 2.3.3 Verificação de encurtamento
+#### 2.3.3 Identificação da empresa
+
+O nome da empresa sendo impersonada dentro do conteudo do correio eletronico é capturado referenciando o Index de empresas.
+
+Se nenhuma empresa for identificada, o correio eletrônico é ignorado por completo, inclusive quando contém hyperlinks ou links de encurtadores conhecidos (DR-003).
+
+#### 2.3.4 Verificação de encurtamento
 
 Cada hyperlink capturado é verificado contra o Registro de domínios de encurtamento de links.
 
 A verificação considera os domínios registrados e os padrões de links encurtados associados a eles.
-
-#### 2.3.4 Identificação da empresa
-
-O nome da empresa sendo impersonada dentro do conteudo do correio eletronico é capturado referenciando o Index de empresas.
 
 #### 2.3.5 Consulta do template
 

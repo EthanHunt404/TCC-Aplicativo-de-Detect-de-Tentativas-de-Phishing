@@ -30,7 +30,7 @@
 | R-10 | **Nomenclatura e SOLID:** conforme o Padrão de Codificação (seções 1 e 3). Uma classe por arquivo. Nomes de domínio em português. |
 | R-11 | **Testes:** seguir a convenção já existente no repositório (confirmada na tarefa 20.1): uma única classe estática de testes com métodos `[Fact]` estáticos, executada pelo `Program`. NÃO DEVE ser criado projeto de testes separado. |
 | R-12 | **Pacotes NuGet:** somente os da decisão P-03. Qualquer outro é uma LACUNA (R-02). |
-| R-13 | **Código existente não muda sem ordem:** `EmailAnalist`, `IConsulta` e as classes de domínio da Etapa 18 já estão implementados e testados. NÃO DEVEM ser renomeados, ter assinatura alterada ou lógica reescrita, exceto se o humano mandar corrigir um defeito. |
+| R-13 | **Código existente não muda sem ordem:** `EmailAnalist`, `IConsulta` e as classes de domínio da Etapa 18 já estão implementados e testados. NÃO DEVEM ser renomeados, ter assinatura alterada ou lógica reescrita, exceto por ordem humana expressa e registrada em `DocRequests.md` (como DR-003). |
 | R-14 | **Prova:** nenhum item "Pronto quando" pode ser marcado ✔ sem a saída do comando ou a evidência anexada ao relatório. |
 | R-15 | **Atraso:** se uma etapa não puder terminar, o agente PARA e reporta. Cortar escopo é decisão do humano e vai para o Controle de Alterações do TR (seção 7). O agente NÃO DEVE cortar nada sozinho. |
 
@@ -203,17 +203,17 @@ Ação pedida ao humano: <lista ou "nenhuma">
 | 22.6 | Agente | Em `Infrastructure`: `ExtratorDeConteudo`, método estático `ConteudoRelevante? Extrair(MimeMessage mensagem)` com as regras da P-08. Devolve `null` quando não há hyperlink (isso implementa a filtragem, RF-05 e RF-06). |
 | 22.7 | Agente | Em `Application`: `ServicoDeAnalise(ChannelReader<ConteudoRelevante>, EmailAnalist, IGravadorRelatorio, INotificador)` com `ExecutarAsync(CancellationToken)`. Para cada item: chamar `EmailAnalist.Analisar`; se devolver relatório, `GravarAsync` e depois `Notificar(caminho)`. Qualquer exceção em um item é registrada no log (P-16) e o laço **continua**. |
 | 22.8 | Agente | No `Program`: carregar a base, criar o `Channel`, iniciar o `ServicoDeAnalise` em `Task.Run` (fora da thread de interface). Modo `--injetar-amostras`: ler cada `.eml` de `base/amostras` (`MimeMessage.Load`), chamar `ExtratorDeConteudo.Extrair` e escrever no `Channel`. |
-| 22.9 | Agente | Testes sem serviços externos: `ExtratorDeConteudo` com as amostras S-01 a S-15 (Etapa 25), `GravadorRelatorioTxt` em pasta temporária (nome do arquivo e linhas conforme P-12), `ServicoDeAnalise` com `IConsulta` em memória, gravador e notificador falsos. Testes `Integracao_*`: `MongoDBInterface` contra a base real. |
+| 22.9 | Agente | Testes sem serviços externos: `ExtratorDeConteudo` com as amostras S-01 a S-15 (Etapa 25), `GravadorRelatorioTxt` em pasta temporária (nome do arquivo e linhas conforme P-12), `ServicoDeAnalise` com `IConsulta` em memória, gravador e notificador falsos. Testar DR-003: empresa não identificada (inclusive retorno `nenhum`) é ignorada mesmo com link encurtado. Testes `Integracao_*`: `MongoDBInterface` contra a base real. |
 | 22.10 | Humano | Rodar `--testes-integracao` e `--injetar-amostras`; conferir relatórios e notificações. Evidências em `/docs/evidencias/etapa22`. |
 
 **Pronto quando**
 1. Build com 0 erros; `--testes` passa.
 2. `--testes-integracao` passa: identifica `BancoExemplo` em um texto de amostra; devolve o template com os domínios oficiais; empresa desconhecida devolve "nenhum".
-3. `--injetar-amostras` gera um `.txt` e uma notificação para cada amostra **suspeita** da tabela 8.6 e nenhum para as não suspeitas e ignoradas (amostras S-11 conforme a Pendência 3 da seção 9).
+3. `--injetar-amostras` gera um `.txt` e uma notificação para cada amostra **suspeita** da tabela 8.6 e nenhum para as não suspeitas e ignoradas (S-11 é ignorada conforme a decisão registrada na seção 9).
 4. Busca no código: `InsertOne`, `InsertMany`, `UpdateOne`, `UpdateMany`, `ReplaceOne`, `DeleteOne`, `DeleteMany`, `CreateOne` e `Indexes` **não ocorrem** fora de `base/`.
 5. Busca no código: `new MongoClient` aparece somente em `MongoDBInterface`.
 
-**NÃO DEVE:** alterar `IConsulta` ou `EmailAnalist`; reimplementar regra de análise na Infrastructure; criar índice ou coleção pela aplicação.
+**NÃO DEVE:** alterar `IConsulta`; reimplementar regra de análise na Infrastructure; criar índice ou coleção pela aplicação. A alteração expressamente aprovada de `EmailAnalist` está limitada à DR-003.
 
 ---
 
@@ -299,7 +299,7 @@ Ação pedida ao humano: <lista ou "nenhuma">
 | S-08 | Cita `BancoExemplo`; remetente `AVISOS@BancoExemplo.com.br`; link `HTTPS://WWW.BANCOEXEMPLO.COM.BR/Fatura` | Não suspeito (sem diferenciar maiúsculas) |
 | S-09 | Cita `Banco Nacional Exemplo`; remetente `avisos@banconacionalexemplo.com.br`; link oficial | Não suspeito (empresa de 3 palavras identificada) |
 | S-10 | Cita `Banco Nacional Exemplo`; remetente oficial; link `https://banconacionalexemplo.top/entrar` | Suspeito |
-| S-11 | Não cita nenhuma empresa do index; link `https://site-desconhecido.example/x` | **A definir pelo humano (Pendência 3)**. O agente só registra o observado |
+| S-11 | Não cita nenhuma empresa do index; link `https://site-desconhecido.example/x` | Ignorada por completo, mesmo contendo hyperlink, conforme decisão DR-003 (sem relatório e sem notificação) |
 | S-12 | Somente texto puro: cita `BancoExemplo`; remetente oficial; `Acesse https://www.bancoexemplo.com.br/atendimento` | Não suspeito. Conta como hyperlink (P-08) |
 | S-13 | HTML malformado (tags sem fechar); cita `BancoExemplo`; remetente oficial; `<a href="https://bancoexemplo-seguro.com/x">` | Suspeito, sem exceção |
 | S-14 | HTML com 20 links, 19 oficiais de `LojaExemplo` e 1 `https://lojaexemplo-promo.com/x`; remetente oficial | Suspeito. Serve de medida de tempo (CA-07) |
@@ -322,7 +322,7 @@ Ação pedida ao humano: <lista ou "nenhuma">
 |---|---|---|
 | 1 | Confirmar as decisões P-01 a P-17 da seção 5 (principalmente P-02 só Gmail, P-04 `oauth.local.json`, P-06 nomes de coleção, P-10 classes de coordenação). | Aprovar como estão: é o caminho mais curto |
 | 2 | Confirmar o ID `F-XX` de cada funcionalidade no Documento de Requisitos vigente (nomes de branch) e se o RF-11 existe nele. | Informar a lista vigente ao agente |
-| 3 | Comportamento quando **nenhuma empresa é identificada** (amostra S-11): os documentos não definem. Opção A: não marcar como suspeito por esse motivo (só por encurtamento). Opção B: marcar como suspeito por "empresa não identificada". | A: sem empresa conhecida não há contra o que comparar |
+| 3 | **Resolvida em 12/11/2026 (DR-003):** quando nenhuma empresa é identificada, ignorar a mensagem inteira, inclusive hyperlinks e encurtadores. | Decisão explícita do usuário: sem empresa conhecida, ignorar para evitar falsos positivos |
 
 ---
 
@@ -330,4 +330,5 @@ Ação pedida ao humano: <lista ou "nenhuma">
 
 | Versão | Data | Item alterado | Razão e impacto |
 |---|---|---|---|
+| 1.1 | 12/11/2026 | R-13, Etapa 22, amostra S-11 e Pendência 3 | DR-003: empresa não identificada implica ignorar a mensagem inteira, inclusive hyperlinks e encurtadores; exceção limitada à ordem humana registrada. |
 | 1.0 | 28/10/2026 | Emissão inicial | Plano de ação da Fase 4 (Etapas 20 a 25) para agentes de codificação, dividido por fase para caber nos limites de contexto. |

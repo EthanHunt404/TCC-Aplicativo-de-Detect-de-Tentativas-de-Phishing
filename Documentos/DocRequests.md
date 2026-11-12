@@ -8,6 +8,15 @@
 - **Impacto:** exceção limitada ao fluxo de versionamento da Fase 4. Não altera requisitos, arquitetura, escopo funcional ou comportamento do produto.
 - **Tratamento de alterações preexistentes:** arquivos já modificados, removidos ou não rastreados antes do trabalho nesta fase não serão incluídos nos commits desta solicitação.
 
+## DR-003 — Ignorar mensagens de empresas não identificadas
+
+- **Origem:** decisão explícita do usuário em 12/11/2026 sobre o comportamento da amostra S-11.
+- **Regra aprovada:** quando nenhuma empresa da mensagem for identificada no banco, ignorar a mensagem por completo, mesmo que contenha hyperlinks ou links de encurtadores conhecidos.
+- **Motivo:** sem uma empresa conhecida não há base segura para comparar remetente e links, e analisá-los poderia gerar falso positivo.
+- **Impacto documental:** a decisão especifica a Pendência 3 da seção 9 e restringe a opção A recomendada, que permitia alertas independentes por encurtamento. A Etapa 22 também proibia alterar `EmailAnalist`; essa regra foi ajustada para permitir implementar a decisão sem mudar `IConsulta`, contratos ou camadas arquiteturais. A documentação de arquitetura foi alinhada ao comportamento aprovado.
+- **Impacto funcional:** a identificação da empresa passa a anteceder todas as verificações; nenhuma verificação ou relatório é produzido para empresa não identificada. A amostra S-11 deve ser ignorada.
+- **Estado:** aprovado pelo usuário em 12/11/2026; plano, arquitetura e testes atualizados para refletir a decisão.
+
 ## DR-002 — Conflito entre domínios de encurtadores reais e dados fictícios
 
 - **Origem:** análise da Etapa 25 antes da tarefa 25.2.

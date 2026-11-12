@@ -31,6 +31,7 @@ public static class EmailAnalistTests
         var consulta = new ConsultaFake
         {
             DominiosEncurtamento = new[] { "bit.ly" },
+            EmpresasIdentificadas = new[] { "Empresa" },
         };
         var analista = new EmailAnalist(consulta);
         var conteudo = new ConteudoRelevante(
@@ -118,16 +119,17 @@ public static class EmailAnalistTests
     }
 
     [Fact]
-    public static void EmpresaNaoIdentificadaSemOutrasInconsistenciasNaoGeraRelatorio()
+    public static void EmpresaNaoIdentificadaEhIgnoradaMesmoComLinkEncurtado()
     {
         var consulta = new ConsultaFake
         {
-            EmpresasIdentificadas = Array.Empty<string>(),
+            DominiosEncurtamento = new[] { "bit.ly" },
+            EmpresasIdentificadas = new[] { "nenhum" },
         };
         var analista = new EmailAnalist(consulta);
         var conteudo = new ConteudoRelevante(
             "conteudo sem empresa reconhecida", "remetente@desconhecido.com", string.Empty,
-            new[] { "http://desconhecido.com/pagina" });
+            new[] { "http://bit.ly/xyz" });
 
         var relatorio = analista.Analisar(conteudo);
 
@@ -327,7 +329,8 @@ public static class EmailAnalistTests
         var notificador = new NotificadorFalso();
         var analista = new EmailAnalist(new ConsultaFake
         {
-            DominiosEncurtamento = new[] { "bit.ly" }
+            DominiosEncurtamento = new[] { "bit.ly" },
+            EmpresasIdentificadas = new[] { "Empresa" },
         });
         var servico = new ServicoDeAnalise(canal.Reader, analista, gravador, notificador);
 
@@ -354,7 +357,8 @@ public static class EmailAnalistTests
         var notificador = new NotificadorFalso();
         var analista = new EmailAnalist(new ConsultaFake
         {
-            DominiosEncurtamento = new[] { "bit.ly" }
+            DominiosEncurtamento = new[] { "bit.ly" },
+            EmpresasIdentificadas = new[] { "Empresa" },
         });
         var servico = new ServicoDeAnalise(canal.Reader, analista, gravador, notificador);
 
